@@ -14,21 +14,6 @@ st.markdown("""
         font-weight: bold;
         margin-bottom: 20px;
     }
-    .status-card {
-        background-color: #f8f9fa;
-        padding: 18px;
-        border-radius: 12px;
-        border-left: 6px solid #FF4B4B;
-        margin-bottom: 15px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .waiting-card {
-        background-color: #fffde7;
-        padding: 14px;
-        border-radius: 10px;
-        border-left: 5px solid #fbc02d;
-        margin-bottom: 10px;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -72,21 +57,11 @@ try:
     df, col_link = load_data()
     df['masked_link'] = df[col_link].apply(mask_url)
     
-    # คำนวณความคืบหน้า
-    # tick 1 = 10 (33%), tick 2 = 20 (66%), tick 3+ = 30 (100%)
     in_progress_df = df[(df['tick_count'] > 0) & (df['tick_count'] < 3)]
     waiting_df = df[df['tick_count'] == 0]
     completed_df = df[df['tick_count'] >= 3]
 
-    # --- 📊 ส่วนแสดงภาพรวมตัวเลข ---
-    m1, m2, m3 = st.columns(3)
-    m1.metric("📋 คิวทั้งหมดในระบบ", f"{len(df)} คิว")
-    m2.metric("⚡ กำลังดำเนินการ", f"{len(in_progress_df)} คิว")
-    m3.metric("✅ ทำเสร็จแล้ว", f"{len(completed_df)} คิว")
-
-    st.markdown("---")
-
-    # --- ⚡ 1. โชว์เฉพาะคิวที่กำลังทำอยู่ ---
+    # --- ⚡ 1. คิวที่กำลังทำอยู่ขณะนี้ (ย้ายมาไว้บนสุด) ---
     st.subheader("⚡ คิวที่กำลังทำอยู่ขณะนี้")
     if not in_progress_df.empty:
         for idx, row in in_progress_df.iterrows():
@@ -105,7 +80,7 @@ try:
     else:
         st.info("💡 ขณะนี้ยังไม่มีคิวที่กำลังรันอยู่ หรือคิวล่าสุดเสร็จเรียบร้อยแล้ว")
 
-    # --- ⌛ 2. โชว์เฉพาะคิวถัดไป (2 คิวถัดไป) ---
+    # --- ⌛ 2. คิวที่รอถัดไป (2 คิวถัดไป) ---
     st.subheader("⌛ คิวที่รอถัดไป (2 คิวถัดไป)")
     next_queues = waiting_df.head(2)
     if not next_queues.empty:
@@ -144,6 +119,15 @@ try:
                 st.progress(progress_pct)
         else:
             st.error("❌ ไม่พบลิงก์นี้ในระบบ กรุณาตรวจสอบลิงก์ใหม่อีกครั้ง")
+
+    st.markdown("---")
+
+    # --- 📊 4. สรุปภาพรวมตัวเลข (ย้ายมาไว้ด้านล่างสุด) ---
+    st.subheader("📊 สรุปภาพรวมระบบ")
+    m1, m2, m3 = st.columns(3)
+    m1.metric("📋 คิวทั้งหมดในระบบ", f"{len(df)} คิว")
+    m2.metric("⚡ กำลังดำเนินการ", f"{len(in_progress_df)} คิว")
+    m3.metric("✅ ทำเสร็จแล้ว", f"{len(completed_df)} คิว")
 
 except Exception as e:
     st.error(f"เกิดข้อผิดพลาดในการดึงข้อมูลจาก Google Sheets: {e}")
