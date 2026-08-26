@@ -75,7 +75,7 @@ try:
                     st.markdown(f"🔗 **ลิงก์:** `{row['masked_link']}`")
                     st.progress(progress_pct)
                 with col_b:
-                    st.success(f"📌 ความคืบหน้า: **{done_count} / 30**")
+                    st.success(f"📌 ความคืบหน้า: **{done_count} / 29**")
                 st.divider()
     else:
         st.info("💡 ขณะนี้ยังไม่มีคิวที่กำลังรันอยู่ หรือคิวล่าสุดเสร็จเรียบร้อยแล้ว")
@@ -85,7 +85,7 @@ try:
     next_queues = waiting_df.head(5)
     if not next_queues.empty:
         for idx, row in next_queues.iterrows():
-            st.warning(f"🔹 **รอทำคิวถัดไป:** `{row['masked_link']}` — 🕒 สถานะ: **รอคิว (0/30)**")
+            st.warning(f"🔹 **รอทำคิวถัดไป:** `{row['masked_link']}` — 🕒 สถานะ: **รอคิว (0/29)**")
     else:
         st.caption("ไม่มีคิวรอทำในระบบ")
 
@@ -101,16 +101,16 @@ try:
             for _, row in search_result.iterrows():
                 ticks = row['tick_count']
                 if ticks >= 3:
-                    status_text = "✅ ทำสำเร็จเรียบร้อยแล้ว (30/30)"
+                    status_text = "✅ ทำสำเร็จเรียบร้อยแล้ว (29/29)"
                     progress_pct = 100
                 elif ticks == 2:
-                    status_text = "⏳ กำลังดำเนินการ (20/30)"
+                    status_text = "⏳ กำลังดำเนินการ (20/29)"
                     progress_pct = 66
                 elif ticks == 1:
-                    status_text = "⏳ กำลังดำเนินการ (10/30)"
+                    status_text = "⏳ กำลังดำเนินการ (10/29)"
                     progress_pct = 33
                 else:
-                    status_text = "🕒 กำลังรอคิว (0/30)"
+                    status_text = "🕒 กำลังรอคิว (0/29)"
                     progress_pct = 0
 
                 st.success(f"🎉 **พบข้อมูลคิวของคุณ!**")
