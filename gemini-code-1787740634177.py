@@ -80,8 +80,8 @@ try:
     else:
         st.info("💡 ขณะนี้ยังไม่มีคิวที่กำลังรันอยู่ หรือคิวล่าสุดเสร็จเรียบร้อยแล้ว")
 
-    # --- ⌛ 2. คิวที่รอถัดไป (2 คิวถัดไป) ---
-    st.subheader("⌛ คิวที่รอถัดไป (2 คิวถัดไป)")
+    # --- ⌛ 2. คิวที่รอถัดไป ---
+    st.subheader("⌛ คิวที่รอถัดไป")
     next_queues = waiting_df.head(2)
     if not next_queues.empty:
         for idx, row in next_queues.iterrows():
