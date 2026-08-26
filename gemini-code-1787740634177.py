@@ -122,12 +122,6 @@ try:
 
     st.markdown("---")
 
-    # --- 📊 4. สรุปภาพรวมตัวเลข (ย้ายมาไว้ด้านล่างสุด) ---
-    st.subheader("📊 สรุปภาพรวมระบบ")
-    m1, m2, m3 = st.columns(3)
-    m1.metric("📋 คิวทั้งหมดในระบบ", f"{len(df)} คิว")
-    m2.metric("⚡ กำลังดำเนินการ", f"{len(in_progress_df)} คิว")
-    m3.metric("✅ ทำเสร็จแล้ว", f"{len(completed_df)} คิว")
 
 except Exception as e:
     st.error(f"เกิดข้อผิดพลาดในการดึงข้อมูลจาก Google Sheets: {e}")
