@@ -82,7 +82,7 @@ try:
 
     # --- ⌛ 2. คิวที่รอถัดไป ---
     st.subheader("⌛ คิวที่รอถัดไป")
-    next_queues = waiting_df.head(2)
+    next_queues = waiting_df.head(5)
     if not next_queues.empty:
         for idx, row in next_queues.iterrows():
             st.warning(f"🔹 **รอทำคิวถัดไป:** `{row['masked_link']}` — 🕒 สถานะ: **รอคิว (0/30)**")
