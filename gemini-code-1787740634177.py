@@ -25,7 +25,6 @@ with btn_col:
         st.cache_data.clear()
         st.rerun()
 
-st.markdown("<br>", unsafe_allow_html=True)
 
 # 📌 ใส่ Spreadsheet ID ของคุณตรงนี้
 SPREADSHEET_ID = "1vZi4vkxw3hmUjteYVXYLDlhzLgrtLJySny_JiGaLtWc"
