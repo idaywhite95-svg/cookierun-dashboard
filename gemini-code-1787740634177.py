@@ -19,13 +19,6 @@ st.markdown("""
 
 st.markdown("<div class='main-title'>🎮 ดูสถานะคิวเชิญเพื่อน Cookie Run</div>", unsafe_allow_html=True)
 
-with btn_col:
-    # ปุ่มรีเฟรช: กดแล้วล้างแคชและโหลดข้อมูลใหม่ทันที
-    if st.button("🔄 รีเฟรชข้อมูล", use_container_width=True):
-        st.cache_data.clear()
-        st.rerun()
-
-
 # 📌 ใส่ Spreadsheet ID ของคุณตรงนี้
 SPREADSHEET_ID = "1vZi4vkxw3hmUjteYVXYLDlhzLgrtLJySny_JiGaLtWc"
 SHEET_NAME = "Sheet1"
