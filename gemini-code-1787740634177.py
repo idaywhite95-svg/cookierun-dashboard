@@ -17,7 +17,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<div class='main-title'>🎮 ระบบติดตามคิว Cookie Run</div>", unsafe_allow_html=True)
+st.markdown("<div class='main-title'>🎮 ระบบติดตามสถานะเชิญเพื่อน Cookie Run</div>", unsafe_allow_html=True)
 
 # 📌 ใส่ Spreadsheet ID ของคุณตรงนี้
 SPREADSHEET_ID = "1vZi4vkxw3hmUjteYVXYLDlhzLgrtLJySny_JiGaLtWc"
