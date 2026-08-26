@@ -1,87 +1,149 @@
 import streamlit as st
 import pandas as pd
 
+# ตั้งค่าหน้าตาเว็บ Dashboard
 st.set_page_config(page_title="Cookie Run Queue Tracker", page_icon="🎮", layout="wide")
 
-st.title("🎮 ระบบติดตามคิวทำกิจกรรม Cookie Run")
+# ปรับแต่ง CSS ตกแต่งให้สวยงาม ดูสะอาดตา
+st.markdown("""
+    <style>
+    .main-title {
+        text-align: center;
+        color: #FF4B4B;
+        font-size: 2.2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .status-card {
+        background-color: #f8f9fa;
+        padding: 18px;
+        border-radius: 12px;
+        border-left: 6px solid #FF4B4B;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .waiting-card {
+        background-color: #fffde7;
+        padding: 14px;
+        border-radius: 10px;
+        border-left: 5px solid #fbc02d;
+        margin-bottom: 10px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# 📌 1. ใส่ Spreadsheet ID ของคุณตรงนี้
-# (เช่น จากลิงก์ https://docs.google.com/spreadsheets/d/1ABC123xxxx/edit ให้เอาแค่ส่วน 1ABC123xxxx)
+st.markdown("<div class='main-title'>🎮 ระบบติดตามคิว Cookie Run</div>", unsafe_allow_html=True)
+
+# 📌 ใส่ Spreadsheet ID ของคุณตรงนี้
 SPREADSHEET_ID = "1vZi4vkxw3hmUjteYVXYLDlhzLgrtLJySny_JiGaLtWc"
-SHEET_NAME = "Sheet1" # ชื่อแท็บใน Google Sheets
+SHEET_NAME = "Sheet1"
 
-# ดึงข้อมูลจาก Google Sheets ออกมาเป็น CSV Format
 GSHEET_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
 
-@st.cache_data(ttl=10) # 🔄 ดึงข้อมูลใหม่จาก Google Sheets ทุกๆ 10 วินาที
+@st.cache_data(ttl=5) # ดึงข้อมูลใหม่จาก Google Sheets ทุก 5 วินาที
 def load_data():
     df = pd.read_csv(GSHEET_URL)
-    status_cols = [c for c in df.columns if 'สถานะงาน' in c]
-    # นับจำนวนเครื่องหมาย ✅
-    df['tick_count'] = df[status_cols].apply(lambda row: sum(1 for v in row if str(v).strip() == '✅'), axis=1)
-    return df
+    
+    # ดึงคอลัมน์แรกเป็นคอลัมน์ลิงก์
+    col_link = df.columns[0]
+    
+    # ดึงคอลัมน์ที่เหลือทั้งหมดที่เป็นการเก็บสถานะงาน
+    status_cols = df.columns[1:]
+    
+    # ฟังก์ชันนับเครื่องหมาย ✅ ในทุกแถวแบบถูกต้อง
+    def count_ticks(row):
+        ticks = 0
+        for col in status_cols:
+            val = str(row[col]).strip()
+            if '✅' in val or val == 'TRUE':
+                ticks += 1
+        return ticks
+
+    df['tick_count'] = df.apply(count_ticks, axis=1)
+    return df, col_link
 
 def mask_url(url):
     url_str = str(url).strip()
-    return url_str[:-4] + "****" if len(url_str) >= 4 else url_str
+    if len(url_str) >= 4:
+        return url_str[:-4] + "****"
+    return url_str
 
 try:
-    df = load_data()
-    col_link = df.columns[0]
+    df, col_link = load_data()
     df['masked_link'] = df[col_link].apply(mask_url)
     
-    # แยกกลุ่มคิวงาน
-    completed_df = df[df['tick_count'] >= 3]
+    # คำนวณความคืบหน้า
+    # tick 1 = 10 (33%), tick 2 = 20 (66%), tick 3+ = 30 (100%)
     in_progress_df = df[(df['tick_count'] > 0) & (df['tick_count'] < 3)]
     waiting_df = df[df['tick_count'] == 0]
+    completed_df = df[df['tick_count'] >= 3]
 
-    # --- 1. คิวรอทำ (แสดงแค่ 2 คิวแรก) ---
-    st.subheader("⌛ คิวรอทำ (2 คิวถัดไป)")
+    # --- 📊 ส่วนแสดงภาพรวมตัวเลข ---
+    m1, m2, m3 = st.columns(3)
+    m1.metric("📋 คิวทั้งหมดในระบบ", f"{len(df)} คิว")
+    m2.metric("⚡ กำลังดำเนินการ", f"{len(in_progress_df)} คิว")
+    m3.metric("✅ ทำเสร็จแล้ว", f"{len(completed_df)} คิว")
+
+    st.markdown("---")
+
+    # --- ⚡ 1. โชว์เฉพาะคิวที่กำลังทำอยู่ ---
+    st.subheader("⚡ คิวที่กำลังทำอยู่ขณะนี้")
+    if not in_progress_df.empty:
+        for idx, row in in_progress_df.iterrows():
+            ticks = row['tick_count']
+            done_count = ticks * 10
+            progress_pct = min(int((ticks / 3) * 100), 100)
+            
+            with st.container():
+                col_a, col_b = st.columns([2, 1])
+                with col_a:
+                    st.markdown(f"🔗 **ลิงก์:** `{row['masked_link']}`")
+                    st.progress(progress_pct)
+                with col_b:
+                    st.success(f"📌 ความคืบหน้า: **{done_count} / 30**")
+                st.divider()
+    else:
+        st.info("💡 ขณะนี้ยังไม่มีคิวที่กำลังรันอยู่ หรือคิวล่าสุดเสร็จเรียบร้อยแล้ว")
+
+    # --- ⌛ 2. โชว์เฉพาะคิวถัดไป (2 คิวถัดไป) ---
+    st.subheader("⌛ คิวที่รอถัดไป (2 คิวถัดไป)")
     next_queues = waiting_df.head(2)
     if not next_queues.empty:
         for idx, row in next_queues.iterrows():
-            st.warning(f"🔹 **คิวรอทำ:** `{row['masked_link']}` | **สถานะ:** 🕒 กำลังรอคิว (0/30)")
+            st.warning(f"🔹 **รอทำคิวถัดไป:** `{row['masked_link']}` — 🕒 สถานะ: **รอคิว (0/30)**")
     else:
-        st.info("ไม่มีคิวค้าง หรือทุกคิวดำเนินการไปแล้ว")
+        st.caption("ไม่มีคิวรอทำในระบบ")
 
     st.markdown("---")
 
-    # --- 2. ภาพรวมสถานะ ---
-    col1, col2, col3 = st.columns(3)
-    col1.metric("คิวทั้งหมด", len(df))
-    col2.metric("กำลังทำ", len(in_progress_df))
-    col3.metric("สำเร็จแล้ว", len(completed_df))
+    # --- 🔍 3. ช่องค้นหาคิวของตนเองสำหรับลูกค้า ---
+    st.subheader("🔍 ตรวจสอบสถานะคิวของคุณ")
+    search_input = st.text_input("วางลิงก์ของคุณที่นี่เพื่อค้นหาสถานะ:", placeholder="เช่น https://cookierunglobal.onelink.me/...")
 
-    st.markdown("---")
+    if search_input:
+        search_result = df[df[col_link].astype(str).str.contains(search_input.strip(), case=False, na=False)]
+        if not search_result.empty:
+            for _, row in search_result.iterrows():
+                ticks = row['tick_count']
+                if ticks >= 3:
+                    status_text = "✅ ทำสำเร็จเรียบร้อยแล้ว (30/30)"
+                    progress_pct = 100
+                elif ticks == 2:
+                    status_text = "⏳ กำลังดำเนินการ (20/30)"
+                    progress_pct = 66
+                elif ticks == 1:
+                    status_text = "⏳ กำลังดำเนินการ (10/30)"
+                    progress_pct = 33
+                else:
+                    status_text = "🕒 กำลังรอคิว (0/30)"
+                    progress_pct = 0
 
-    # --- 3. ค้นหาคิว ---
-    st.subheader("🔍 ค้นหาคิวของคุณ")
-    search_query = st.text_input("กรอกลิงก์บางส่วนเพื่อค้นหา:")
-    
-    display_df = df.copy()
-    if search_query:
-        display_df = display_df[display_df[col_link].astype(str).str.contains(search_query, case=False, na=False)]
-
-    for idx, row in display_df.iterrows():
-        ticks = row['tick_count']
-        if ticks >= 3:
-            status_text = "✅ สำเร็จแล้ว (30/30)"
-            progress_pct = 100
-        elif ticks == 2:
-            status_text = "⏳ ดำเนินการแล้ว (20/30)"
-            progress_pct = 66
-        elif ticks == 1:
-            status_text = "⏳ ดำเนินการแล้ว (10/30)"
-            progress_pct = 33
+                st.success(f"🎉 **พบข้อมูลคิวของคุณ!**")
+                st.write(f"🔗 ลิงก์: `{row['masked_link']}`")
+                st.write(f"📊 สถานะ: **{status_text}**")
+                st.progress(progress_pct)
         else:
-            status_text = "🕒 กำลังรอคิว (0/30)"
-            progress_pct = 0
-
-        with st.container():
-            c1, c2, c3 = st.columns([3, 2, 2])
-            c1.write(f"🔗 **คิวที่ {idx+1}:** `{row['masked_link']}`")
-            c2.write(f"**สถานะ:** {status_text}")
-            c3.progress(progress_pct)
+            st.error("❌ ไม่พบลิงก์นี้ในระบบ กรุณาตรวจสอบลิงก์ใหม่อีกครั้ง")
 
 except Exception as e:
     st.error(f"เกิดข้อผิดพลาดในการดึงข้อมูลจาก Google Sheets: {e}")
