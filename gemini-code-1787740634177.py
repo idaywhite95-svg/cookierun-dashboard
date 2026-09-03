@@ -132,7 +132,7 @@ def mask_url(url):
     url_str = str(url).strip()
 
     if len(url_str) >= 4:
-        return url_str[:-4] + "****"
+        return url_str[:-4] + "**"
 
     return url_str
 
