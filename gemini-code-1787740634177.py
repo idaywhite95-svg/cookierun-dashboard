@@ -544,52 +544,52 @@ try:
         )
 
     # =====================================================
-# คิวที่ทำสำเร็จล่าสุด
-# =====================================================
+    # คิวที่ทำสำเร็จล่าสุด
+    # =====================================================
 
-st.markdown(
-    '<div class="section-title">'
-    '✅ คิวที่ทำสำเร็จเรียบร้อยแล้ว ล่าสุด'
-    '</div>',
-    unsafe_allow_html=True
-)
-
-# ดึงเฉพาะคิวที่สำเร็จ
-completed_df = df[
-    df["status"] == "สำเร็จ"
-]
-
-if not completed_df.empty:
-
-    # แสดง 10 คิวล่าสุด
-    latest_completed = (
-        completed_df
-        .tail(10)
-        .iloc[::-1]
+    st.markdown(
+        '<div class="section-title">'
+        '✅ คิวที่ทำสำเร็จเรียบร้อยแล้ว ล่าสุด'
+        '</div>',
+        unsafe_allow_html=True
     )
 
-    for idx, row in latest_completed.iterrows():
+    # ดึงเฉพาะคิวที่สำเร็จ
+    completed_df = df[
+        df["status"] == "สำเร็จ"
+    ]
 
-        with st.container(border=True):
+    if not completed_df.empty:
 
-            left, right = st.columns([4, 1])
+        # แสดง 10 คิวล่าสุด
+        latest_completed = (
+            completed_df
+            .tail(10)
+            .iloc[::-1]
+        )
 
-            with left:
+        for idx, row in latest_completed.iterrows():
 
-                st.markdown(
-                    f"✅ **ลิงก์:** "
-                    f"`{row['masked_link']}`"
-                )
+            with st.container(border=True):
 
-            with right:
+                left, right = st.columns([4, 1])
 
-                st.success("29/29")
+                with left:
 
-else:
+                    st.markdown(
+                        f"✅ **ลิงก์:** "
+                        f"`{row['masked_link']}`"
+                    )
 
-    st.info(
-        "ยังไม่มีคิวที่ทำสำเร็จ"
-    )
+                with right:
+
+                    st.success("29/29")
+
+    else:
+
+        st.info(
+            "ยังไม่มีคิวที่ทำสำเร็จ"
+        )
     
 
     # =====================================================
