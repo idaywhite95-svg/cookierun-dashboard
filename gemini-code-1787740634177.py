@@ -837,4 +837,3 @@ except Exception as e:
     st.error(
         f"เกิดข้อผิดพลาดในการดึงข้อมูลจาก Google Sheets: {e}"
     )
-```
