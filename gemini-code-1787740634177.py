@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import textwrap
 
 # =========================================================
 # ตั้งค่าหน้าเว็บ
@@ -591,7 +592,7 @@ try:
             "🎉 ไม่มีคิวรอทำในระบบ"
         )
 
-    # =====================================================
+        # =====================================================
     # คิวที่ทำสำเร็จล่าสุด
     # =====================================================
 
@@ -618,26 +619,26 @@ try:
 
         for idx, row in latest_completed.iterrows():
 
-            st.markdown(
-                f"""
+            completed_html = textwrap.dedent(f"""
                 <div class="completed-queue">
                     <div class="completed-row">
-
-                        <div class="completed-link">
+                        <span class="completed-link">
                             ✅ ลิงก์:
-                        </div>
+                        </span>
 
-                        <div class="completed-link-code">
+                        <span class="completed-link-code">
                             {row['masked_link']}
-                        </div>
+                        </span>
 
-                        <div class="completed-result">
+                        <span class="completed-result">
                             29/29
-                        </div>
-
+                        </span>
                     </div>
                 </div>
-                """,
+            """)
+
+            st.markdown(
+                completed_html,
                 unsafe_allow_html=True
             )
 
@@ -646,7 +647,6 @@ try:
         st.info(
             "ยังไม่มีคิวที่ทำสำเร็จ"
         )
-
 
     # =====================================================
     # ค้นหาคิวของตัวเอง
