@@ -266,6 +266,54 @@ st.markdown("""
         border-top: 1px solid #252a34;
     }
 
+
+    /* =====================================================
+       COMPLETED QUEUE - COMPACT
+    ===================================================== */
+
+    .completed-queue {
+        background: #181b24;
+        border: 1px solid #2b303c;
+        border-radius: 12px;
+        padding: 8px 16px;
+        margin-bottom: 3px;
+    }
+
+    .completed-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 34px;
+    }
+
+    .completed-link {
+        color: #f1f5f9;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .completed-link-code {
+        background: #f1f5f9;
+        color: #168f75;
+        border-radius: 4px;
+        padding: 3px 6px;
+        font-family: monospace;
+        font-size: 13px;
+        font-weight: 400;
+        white-space: nowrap;
+    }
+
+    .completed-result {
+        background: #0d2922;
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 7px 14px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -570,27 +618,35 @@ try:
 
         for idx, row in latest_completed.iterrows():
 
-            with st.container(border=True):
+            st.markdown(
+                f"""
+                <div class="completed-queue">
+                    <div class="completed-row">
 
-                left, right = st.columns([4, 1])
+                        <div class="completed-link">
+                            ✅ ลิงก์:
+                        </div>
 
-                with left:
+                        <div class="completed-link-code">
+                            {row['masked_link']}
+                        </div>
 
-                    st.markdown(
-                        f"✅ **ลิงก์:** "
-                        f"`{row['masked_link']}`"
-                    )
+                        <div class="completed-result">
+                            29/29
+                        </div>
 
-                with right:
-
-                    st.success("29/29")
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
     else:
 
         st.info(
             "ยังไม่มีคิวที่ทำสำเร็จ"
         )
-    
+
 
     # =====================================================
     # ค้นหาคิวของตัวเอง
