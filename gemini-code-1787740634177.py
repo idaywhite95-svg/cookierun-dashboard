@@ -1,54 +1,331 @@
+```python
 import streamlit as st
 import pandas as pd
 
 # =========================================================
-# ตั้งค่าหน้าตาเว็บ Dashboard
+# PAGE CONFIG
 # =========================================================
 st.set_page_config(
     page_title="Cookie Run Queue Tracker",
     page_icon="🎮",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
 # =========================================================
-# CSS
+# MODERN CSS
 # =========================================================
 st.markdown("""
-    <style>
-    .main-title {
+<style>
+
+    /* ================================
+       GLOBAL
+    ================================= */
+    .stApp {
+        background: #0f1117;
+        color: #f5f7fa;
+    }
+
+    .main .block-container {
+        max-width: 1200px;
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+
+    /* ซ่อนเมนู Streamlit */
+    #MainMenu {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+
+    header {
+        visibility: hidden;
+    }
+
+    /* ================================
+       HEADER
+    ================================= */
+    .hero {
+        background:
+            linear-gradient(
+                135deg,
+                rgba(255,75,75,0.20),
+                rgba(120,80,255,0.15)
+            );
+
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 24px;
+
+        padding: 30px 25px;
+        margin-bottom: 25px;
+
         text-align: center;
-        color: #FF4B4B;
-        font-size: 2.2rem;
-        font-weight: bold;
+
+        box-shadow:
+            0 15px 40px rgba(0,0,0,0.25);
+    }
+
+    .hero-icon {
+        font-size: 42px;
         margin-bottom: 5px;
     }
 
-    .sub-title {
-        text-align: center;
-        color: #555555;
-        font-size: 1.05rem;
-        margin-bottom: 25px;
+    .hero-title {
+        font-size: 32px;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.5px;
     }
-    </style>
+
+    .hero-subtitle {
+        margin-top: 8px;
+        font-size: 15px;
+        color: #aeb4c0;
+    }
+
+    .notice {
+        display: inline-block;
+
+        margin-top: 16px;
+        padding: 8px 16px;
+
+        border-radius: 999px;
+
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+
+        color: #d7dbe2;
+        font-size: 13px;
+    }
+
+    /* ================================
+       STAT CARDS
+    ================================= */
+    .stat-card {
+        background: #171a23;
+
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 18px;
+
+        padding: 20px;
+
+        min-height: 110px;
+
+        box-shadow:
+            0 8px 25px rgba(0,0,0,0.18);
+    }
+
+    .stat-title {
+        color: #8f96a3;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .stat-number {
+        color: #ffffff;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    .stat-desc {
+        color: #737b89;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    /* ================================
+       SECTION TITLE
+    ================================= */
+    .section-title {
+        font-size: 21px;
+        font-weight: 750;
+
+        margin-top: 32px;
+        margin-bottom: 15px;
+
+        color: #ffffff;
+    }
+
+    /* ================================
+       QUEUE CARD
+    ================================= */
+    .queue-card {
+        background: #171a23;
+
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 18px;
+
+        padding: 18px 20px;
+        margin-bottom: 12px;
+
+        box-shadow:
+            0 7px 20px rgba(0,0,0,0.16);
+
+        transition: all 0.2s ease;
+    }
+
+    .queue-card:hover {
+        border-color: rgba(255,255,255,0.16);
+
+        transform: translateY(-1px);
+    }
+
+    .queue-link {
+        color: #dce1e8;
+        font-family: monospace;
+        font-size: 14px;
+    }
+
+    .status-running {
+        display: inline-block;
+
+        padding: 5px 11px;
+
+        border-radius: 999px;
+
+        background: rgba(255,193,7,0.12);
+        color: #ffc107;
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-waiting {
+        display: inline-block;
+
+        padding: 5px 11px;
+
+        border-radius: 999px;
+
+        background: rgba(120,130,150,0.12);
+        color: #aeb5c1;
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-success {
+        display: inline-block;
+
+        padding: 5px 11px;
+
+        border-radius: 999px;
+
+        background: rgba(46,204,113,0.12);
+        color: #4ade80;
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* ================================
+       SEARCH BOX
+    ================================= */
+    .search-title {
+        font-size: 21px;
+        font-weight: 750;
+
+        color: #ffffff;
+
+        margin-top: 35px;
+        margin-bottom: 8px;
+    }
+
+    .search-desc {
+        color: #858c99;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    /* ================================
+       SUCCESS LIST
+    ================================= */
+    .completed-card {
+        background: #151a18;
+
+        border: 1px solid rgba(74,222,128,0.10);
+        border-radius: 15px;
+
+        padding: 14px 18px;
+        margin-bottom: 9px;
+    }
+
+    .completed-link {
+        color: #d5ddd7;
+        font-family: monospace;
+        font-size: 13px;
+    }
+
+    /* ================================
+       INFO
+    ================================= */
+    .empty-box {
+        background: #151821;
+
+        border: 1px dashed rgba(255,255,255,0.10);
+
+        border-radius: 16px;
+
+        padding: 25px;
+
+        text-align: center;
+
+        color: #737b89;
+
+        margin-bottom: 10px;
+    }
+
+    /* ================================
+       FOOTER
+    ================================= */
+    .footer {
+        text-align: center;
+
+        color: #5f6672;
+
+        font-size: 12px;
+
+        margin-top: 30px;
+        padding-top: 20px;
+
+        border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+</style>
 """, unsafe_allow_html=True)
 
-# =========================================================
-# หัวเว็บ
-# =========================================================
-st.markdown(
-    "<div class='main-title'>🎮 ดูสถานะคิวเชิญเพื่อน Cookie Run</div>",
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    "<div class='sub-title'>"
-    "เป็นงานกดมือ 100% เว็บไซต์นี้มีไว้สำหรับอัพเดตสถานะคิวของท่าน เท่านั้น!!"
-    "</div>",
-    unsafe_allow_html=True
-)
 
 # =========================================================
-# Google Sheets
+# HEADER
+# =========================================================
+st.markdown("""
+<div class="hero">
+
+    <div class="hero-icon">🎮</div>
+
+    <div class="hero-title">
+        ดูสถานะคิวเชิญเพื่อน Cookie Run
+    </div>
+
+    <div class="hero-subtitle">
+        ระบบตรวจสอบสถานะคิวแบบออนไลน์
+    </div>
+
+    <div class="notice">
+        🖐️ เป็นงานกดมือ 100% 
+        &nbsp; • &nbsp;
+        เว็บไซต์นี้มีไว้สำหรับอัพเดตสถานะคิวของท่านเท่านั้น!!
+    </div>
+
+</div>
+""", unsafe_allow_html=True)
+
+
+# =========================================================
+# GOOGLE SHEETS
 # =========================================================
 SPREADSHEET_ID = "1vZi4vkxw3hmUjteYVXYLDlhzLgrtLJySny_JiGaLtWc"
 SHEET_NAME = "Sheet1"
@@ -58,23 +335,19 @@ GSHEET_URL = (
     f"{SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
 )
 
+
 # =========================================================
-# โหลดข้อมูล
+# LOAD DATA
 # =========================================================
 @st.cache_data(ttl=5)
 def load_data():
 
     df = pd.read_csv(GSHEET_URL)
 
-    # คอลัมน์แรก = ลิงก์
     col_link = df.columns[0]
 
-    # คอลัมน์สถานะทั้งหมด
     status_cols = df.columns[1:]
 
-    # -----------------------------------------------------
-    # ตรวจสอบสถานะของแต่ละแถว
-    # -----------------------------------------------------
     def analyze_status(row):
 
         tick_count = 0
@@ -84,11 +357,9 @@ def load_data():
 
             val = str(row[col]).strip().upper()
 
-            # มี ⏳ = กำลังทำ
             if "⏳" in val:
                 has_waiting = True
 
-            # รองรับเครื่องหมายสำเร็จ
             if "✅" in val or val == "TRUE":
                 tick_count += 1
 
@@ -97,73 +368,149 @@ def load_data():
             "has_waiting": has_waiting
         })
 
-    status_result = df.apply(analyze_status, axis=1)
+    status_result = df.apply(
+        analyze_status,
+        axis=1
+    )
 
     df["tick_count"] = status_result["tick_count"]
     df["has_waiting"] = status_result["has_waiting"]
 
-    # -----------------------------------------------------
-    # กำหนดสถานะ
-    # -----------------------------------------------------
     def get_status(row):
 
-        # ถ้ามี ⏳ อย่างน้อย 1 ช่อง = กำลังทำ
         if row["has_waiting"]:
             return "กำลังทำ"
 
-        # ครบ 3 ช่อง = สำเร็จ
         elif row["tick_count"] >= 3:
             return "สำเร็จ"
 
-        # นอกนั้น = รอคิว
         else:
             return "รอคิว"
 
-    df["status"] = df.apply(get_status, axis=1)
+    df["status"] = df.apply(
+        get_status,
+        axis=1
+    )
 
     return df, col_link
 
 
 # =========================================================
-# ปิดบังลิงก์
+# MASK URL
 # =========================================================
 def mask_url(url):
 
     url_str = str(url).strip()
 
-    if len(url_str) >= 4:
-        return url_str[:-4] + "**"
+    if len(url_str) >= 2:
+        return url_str[:-2] + "**"
 
     return url_str
 
 
 # =========================================================
-# เริ่มระบบ
+# MAIN
 # =========================================================
 try:
 
     df, col_link = load_data()
 
-    # สร้างลิงก์แบบปิดท้าย
     df["masked_link"] = df[col_link].apply(mask_url)
 
-    # =====================================================
-    # แยกประเภทคิว
-    # =====================================================
+    # แยกสถานะ
+    in_progress_df = df[
+        df["status"] == "กำลังทำ"
+    ]
 
-    # กำลังทำ
-    in_progress_df = df[df["status"] == "กำลังทำ"]
+    waiting_df = df[
+        df["status"] == "รอคิว"
+    ]
 
-    # รอคิว
-    waiting_df = df[df["status"] == "รอคิว"]
+    completed_df = df[
+        df["status"] == "สำเร็จ"
+    ]
 
-    # สำเร็จ
-    completed_df = df[df["status"] == "สำเร็จ"]
 
     # =====================================================
-    # 1. คิวที่กำลังทำอยู่
+    # STATISTICS
     # =====================================================
-    st.subheader("⚡ คิวที่กำลังทำอยู่ขณะนี้")
+    st.markdown(
+        '<div class="section-title">📊 ภาพรวมคิว</div>',
+        unsafe_allow_html=True
+    )
+
+    stat1, stat2, stat3 = st.columns(3)
+
+    with stat1:
+
+        st.markdown(f"""
+        <div class="stat-card">
+
+            <div class="stat-title">
+                ⚡ กำลังทำ
+            </div>
+
+            <div class="stat-number">
+                {len(in_progress_df)}
+            </div>
+
+            <div class="stat-desc">
+                คิวที่กำลังดำเนินการ
+            </div>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+
+    with stat2:
+
+        st.markdown(f"""
+        <div class="stat-card">
+
+            <div class="stat-title">
+                ⌛ รอคิว
+            </div>
+
+            <div class="stat-number">
+                {len(waiting_df)}
+            </div>
+
+            <div class="stat-desc">
+                คิวที่รอดำเนินการ
+            </div>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+
+    with stat3:
+
+        st.markdown(f"""
+        <div class="stat-card">
+
+            <div class="stat-title">
+                ✅ สำเร็จแล้ว
+            </div>
+
+            <div class="stat-number">
+                {len(completed_df)}
+            </div>
+
+            <div class="stat-desc">
+                จำนวนคิวที่ทำสำเร็จ
+            </div>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+
+    # =====================================================
+    # RUNNING QUEUES
+    # =====================================================
+    st.markdown(
+        '<div class="section-title">⚡ คิวที่กำลังทำอยู่ขณะนี้</div>',
+        unsafe_allow_html=True
+    )
 
     if not in_progress_df.empty:
 
@@ -171,45 +518,86 @@ try:
 
             ticks = int(row["tick_count"])
 
-            # คำนวณความคืบหน้า
-            done_count = min(ticks * 10, 29)
+            done_count = min(
+                ticks * 10,
+                29
+            )
 
             progress_pct = min(
                 int((done_count / 29) * 100),
                 100
             )
 
-            with st.container():
+            st.markdown(f"""
+            <div class="queue-card">
 
-                col_a, col_b = st.columns([2, 1])
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:12px;
+                ">
 
-                with col_a:
+                    <div>
+                        🔗
+                        <span class="queue-link">
+                            {row['masked_link']}
+                        </span>
+                    </div>
 
-                    st.markdown(
-                        f"🔗 **ลิงก์:** `{row['masked_link']}`"
-                    )
+                    <div class="status-running">
+                        ⏳ กำลังทำ
+                    </div>
 
-                    st.progress(progress_pct)
+                </div>
 
-                with col_b:
+                <div style="
+                    background:#252a35;
+                    height:8px;
+                    border-radius:10px;
+                    overflow:hidden;
+                ">
 
-                    st.info(
-                        f"⏳ **กำลังทำ** "
-                        f"({done_count} / 29)"
-                    )
+                    <div style="
+                        width:{progress_pct}%;
+                        height:100%;
+                        background:linear-gradient(
+                            90deg,
+                            #ff4b4b,
+                            #ff8a4b
+                        );
+                        border-radius:10px;
+                    "></div>
 
-                st.divider()
+                </div>
+
+                <div style="
+                    margin-top:9px;
+                    color:#8f96a3;
+                    font-size:12px;
+                ">
+                    ความคืบหน้า {done_count} / 29
+                </div>
+
+            </div>
+            """, unsafe_allow_html=True)
 
     else:
 
-        st.info(
-            "💡 ขณะนี้ยังไม่มีคิวที่กำลังทำอยู่"
-        )
+        st.markdown("""
+        <div class="empty-box">
+            💡 ขณะนี้ยังไม่มีคิวที่กำลังทำอยู่
+        </div>
+        """, unsafe_allow_html=True)
+
 
     # =====================================================
-    # 2. คิวที่รอถัดไป
+    # WAITING QUEUES
     # =====================================================
-    st.subheader("⌛ คิวที่รอถัดไป")
+    st.markdown(
+        '<div class="section-title">⌛ คิวที่รอถัดไป</div>',
+        unsafe_allow_html=True
+    )
 
     next_queues = waiting_df.head(5)
 
@@ -217,54 +605,111 @@ try:
 
         for idx, row in next_queues.iterrows():
 
-            st.warning(
-                f"🔹 **รอทำคิวถัดไป:** "
-                f"`{row['masked_link']}` "
-                f"— 🕒 สถานะ: **รอคิว (0/29)**"
-            )
+            st.markdown(f"""
+            <div class="queue-card">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                ">
+
+                    <div>
+                        🔗
+                        <span class="queue-link">
+                            {row['masked_link']}
+                        </span>
+                    </div>
+
+                    <div class="status-waiting">
+                        🕒 รอทำคิวถัดไป
+                    </div>
+
+                </div>
+
+            </div>
+            """, unsafe_allow_html=True)
 
     else:
 
-        st.caption(
-            "ไม่มีคิวรอทำในระบบ"
-        )
+        st.markdown("""
+        <div class="empty-box">
+            🎉 ไม่มีคิวรอทำในระบบ
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("---")
 
     # =====================================================
-    # 3. คิวที่ทำสำเร็จล่าสุด
+    # COMPLETED
     # =====================================================
-    st.subheader("✅ คิวที่ทำสำเร็จเรียบร้อยแล้ว ล่าสุด")
+    st.markdown(
+        '<div class="section-title">✅ คิวที่ทำสำเร็จเรียบร้อยแล้ว ล่าสุด</div>',
+        unsafe_allow_html=True
+    )
 
     if not completed_df.empty:
 
-        # เอา 10 คิวล่าสุด
-        latest_completed = completed_df.tail(10).iloc[::-1]
+        latest_completed = (
+            completed_df
+            .tail(10)
+            .iloc[::-1]
+        )
 
         for idx, row in latest_completed.iterrows():
 
-            st.success(
-                f"✅ `{row['masked_link']}` "
-                f"— **ทำสำเร็จเรียบร้อยแล้ว (29/29)**"
-            )
+            st.markdown(f"""
+            <div class="completed-card">
+
+                <span style="margin-right:8px;">
+                    ✅
+                </span>
+
+                <span class="completed-link">
+                    {row['masked_link']}
+                </span>
+
+                <span style="
+                    float:right;
+                    color:#4ade80;
+                    font-size:12px;
+                    font-weight:600;
+                ">
+                    29/29
+                </span>
+
+            </div>
+            """, unsafe_allow_html=True)
 
     else:
 
-        st.caption(
-            "ยังไม่มีคิวที่ทำสำเร็จ"
-        )
+        st.markdown("""
+        <div class="empty-box">
+            ยังไม่มีคิวที่ทำสำเร็จ
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("---")
 
     # =====================================================
-    # 4. ค้นหาคิวของตัวเอง
+    # SEARCH
     # =====================================================
-    st.subheader("🔍 ตรวจสอบสถานะคิวของคุณ")
+    st.markdown(
+        '<div class="search-title">🔍 ตรวจสอบสถานะคิวของคุณ</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        '<div class="search-desc">'
+        'วางลิงก์ของคุณด้านล่างเพื่อดูสถานะคิว'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
     search_input = st.text_input(
-        "วางลิงก์ของคุณที่นี่เพื่อค้นหาสถานะ:",
-        placeholder="เช่น https://cookierunglobal.onelink.me/..."
+        "",
+        placeholder="🔗 วางลิงก์ Cookie Run ของคุณที่นี่...",
+        label_visibility="collapsed"
     )
+
 
     if search_input:
 
@@ -276,7 +721,8 @@ try:
             .str.contains(
                 search_text,
                 case=False,
-                na=False
+                na=False,
+                regex=False
             )
         ]
 
@@ -286,19 +732,18 @@ try:
 
                 ticks = int(row["tick_count"])
 
+                st.markdown(
+                    '<div style="margin-top:20px;"></div>',
+                    unsafe_allow_html=True
+                )
+
                 # =========================================
-                # สำเร็จ
+                # SUCCESS
                 # =========================================
                 if row["status"] == "สำเร็จ":
 
-                    status_text = (
-                        "✅ ทำสำเร็จเรียบร้อยแล้ว (29/29)"
-                    )
-
-                    progress_pct = 100
-
                     st.success(
-                        "🎉 **พบข้อมูลคิวของคุณ!**"
+                        "🎉 พบข้อมูลคิวของคุณ!"
                     )
 
                     st.write(
@@ -306,13 +751,15 @@ try:
                     )
 
                     st.write(
-                        f"📊 สถานะ: **{status_text}**"
+                        "📊 สถานะ: **✅ "
+                        "ทำสำเร็จเรียบร้อยแล้ว (29/29)**"
                     )
 
-                    st.progress(progress_pct)
+                    st.progress(100)
+
 
                 # =========================================
-                # กำลังทำ
+                # RUNNING
                 # =========================================
                 elif row["status"] == "กำลังทำ":
 
@@ -326,13 +773,8 @@ try:
                         100
                     )
 
-                    status_text = (
-                        f"⏳ กำลังดำเนินการ "
-                        f"({done_count}/29)"
-                    )
-
                     st.info(
-                        "🎉 **พบข้อมูลคิวของคุณ!**"
+                        "🎉 พบข้อมูลคิวของคุณ!"
                     )
 
                     st.write(
@@ -340,24 +782,21 @@ try:
                     )
 
                     st.write(
-                        f"📊 สถานะ: **{status_text}**"
+                        f"📊 สถานะ: **⏳ "
+                        f"กำลังดำเนินการ "
+                        f"({done_count}/29)**"
                     )
 
                     st.progress(progress_pct)
 
+
                 # =========================================
-                # รอคิว
+                # WAITING
                 # =========================================
                 else:
 
-                    status_text = (
-                        "🕒 รอทำคิวถัดไป (0/29)"
-                    )
-
-                    progress_pct = 0
-
                     st.warning(
-                        "🎉 **พบข้อมูลคิวของคุณ!**"
+                        "🎉 พบข้อมูลคิวของคุณ!"
                     )
 
                     st.write(
@@ -365,10 +804,12 @@ try:
                     )
 
                     st.write(
-                        f"📊 สถานะ: **{status_text}**"
+                        "📊 สถานะ: **🕒 "
+                        "รอทำคิวถัดไป (0/29)**"
                     )
 
-                    st.progress(progress_pct)
+                    st.progress(0)
+
 
         else:
 
@@ -377,14 +818,19 @@ try:
                 "กรุณาตรวจสอบลิงก์ใหม่อีกครั้ง"
             )
 
-    st.markdown("---")
 
     # =====================================================
-    # อัปเดตอัตโนมัติ
+    # FOOTER
     # =====================================================
-    st.caption(
-        "🔄 ระบบอัปเดตข้อมูลจาก Google Sheets ทุก 5 วินาที"
-    )
+    st.markdown("""
+    <div class="footer">
+
+        🔄 ระบบอัปเดตข้อมูลจาก Google Sheets ทุก 5 วินาที
+        <br>
+        Cookie Run Queue Tracker
+
+    </div>
+    """, unsafe_allow_html=True)
 
 
 except Exception as e:
@@ -392,3 +838,4 @@ except Exception as e:
     st.error(
         f"เกิดข้อผิดพลาดในการดึงข้อมูลจาก Google Sheets: {e}"
     )
+```
