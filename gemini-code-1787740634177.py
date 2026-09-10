@@ -490,59 +490,82 @@ try:
     st.markdown("---")
 
     # =====================================================
-    # 3. คิวที่ทำสำเร็จล่าสุด
-    # =====================================================
+# 3. คิวที่ทำสำเร็จล่าสุด
+# =====================================================
 
-    st.subheader("✅ คิวที่ทำสำเร็จเรียบร้อยแล้ว ล่าสุด")
+st.subheader("✅ คิวที่ทำสำเร็จเรียบร้อยแล้ว ล่าสุด")
 
-    if not completed_df.empty:
+if not completed_df.empty:
 
-        latest_completed = completed_df.tail(10).iloc[::-1]
+    latest_completed = completed_df.tail(10).iloc[::-1]
 
-        for idx, row in latest_completed.iterrows():
+    for idx, row in latest_completed.iterrows():
 
-            st.markdown(
-                f"""
-                <div class='modern-card'>
-                    <div class='queue-link'>
+        st.markdown(
+            f"""
+            <div class="modern-card">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    gap:15px;
+                    flex-wrap:wrap;
+                ">
+
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                        min-width:0;
+                    ">
+
                         <span style="
                             color:#047857;
                             font-weight:700;
+                            font-size:0.95rem;
+                            white-space:nowrap;
                         ">
                             ✅ สำเร็จ
                         </span>
 
-                        &nbsp;
-
-                        <code>{row['masked_link']}</code>
-
-                        <span class='status-success'
-                        style='float:right;'>
-                            29 / 29
-                        </span>
-
-                        <br><br>
-
-                        <span style="
-                            color:#64748b;
-                            font-size:0.9rem;
+                        <code style="
+                            background:#f1f5f9;
+                            color:#475569;
+                            padding:6px 10px;
+                            border-radius:8px;
+                            font-size:0.85rem;
+                            word-break:break-all;
                         ">
-                            ทำสำเร็จเรียบร้อยแล้ว
-                        </span>
+                            {row['masked_link']}
+                        </code>
+
                     </div>
+
+                    <span class="status-success">
+                        29 / 29
+                    </span>
+
                 </div>
-                """,
-                unsafe_allow_html=True
-            )
 
-    else:
+                <div style="
+                    color:#64748b;
+                    font-size:0.9rem;
+                    margin-top:15px;
+                ">
+                    ทำสำเร็จเรียบร้อยแล้ว
+                </div>
 
-        st.caption(
-            "ยังไม่มีคิวที่ทำสำเร็จ"
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
-    st.markdown("---")
+else:
 
+    st.caption(
+        "ยังไม่มีคิวที่ทำสำเร็จ"
+    )
     # =====================================================
     # 4. ค้นหาคิวของตัวเอง
     # =====================================================
