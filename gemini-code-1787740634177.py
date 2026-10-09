@@ -442,12 +442,12 @@ hr {
 st.markdown("""
 <div class="hero">
     <div class="hero-tag">✦ COOKIE RUN • QUEUE CENTER ✦</div>
-    <div class="hero-title">🎮 COOKIE RUN <span>QUEUE TRACKER</span></div>
+    <div class="hero-title">🎮 COOKIE RUN <span>QUEUE</span></div>
     <div class="hero-subtitle">
         ระบบตรวจสอบสถานะคิวเชิญเพื่อนของคุณ<br>
         ติดตามสถานะได้ง่าย สะดวก และรวดเร็ว
     </div>
-    <div class="hero-note">🛡️ ระบบกดมือ 100% ปลอดภัยแน่นอน • s</div>
+    <div class="hero-note">🛡️ ระบบกดมือ 100% ปลอดภัยแน่นอน • </div>
 </div>
 """, unsafe_allow_html=True)
 
