@@ -442,7 +442,7 @@ hr {
 st.markdown("""
 <div class="hero">
     <div class="hero-tag">✦ COOKIE RUN • QUEUE CENTER ✦</div>
-    <div class="hero-title">🎮 COOKIE RUN <span>QUEUE</span></div>
+    <div class="hero-title">🎮 COOKIE RUN <span>Classic</span></div>
     <div class="hero-subtitle">
         ระบบตรวจสอบสถานะคิวเชิญเพื่อนของคุณ<br>
         ติดตามสถานะได้ง่าย สะดวก และรวดเร็ว
