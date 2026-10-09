@@ -448,6 +448,13 @@ st.markdown("""
         ติดตามสถานะได้ง่าย สะดวก และรวดเร็ว
     </div>
     <div class="hero-note">🛡️ ระบบกดมือ 100% ปลอดภัยแน่นอน • </div>
+    <div class="hero-note"> ติดต่อสอบถาม Facebook :
+    <a href="https://www.facebook.com/sakkarin.38"
+       target="_blank" rel="noopener noreferrer"
+       style="color:#55d9ff; font-weight:700; text-decoration:none;">
+        Sakkarin papai
+    </a>
+</div>
 </div>
 """, unsafe_allow_html=True)
 
