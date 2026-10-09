@@ -824,10 +824,6 @@ try:
             🎮 COOKIE RUN QUEUE TRACKER
         </div>
         🔄 ระบบอัปเดตข้อมูล ทุก 5 วินาที หรือหากข้อมูลไม่อัปเดต โปรดกดรีเฟรช ใหม่อีกครั้ง
-        <br>
-        <span style="color:#667394;">
-            Neon Gaming Interface
-        </span>
     </div>
     """, unsafe_allow_html=True)
 
