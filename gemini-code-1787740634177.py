@@ -447,7 +447,7 @@ st.markdown("""
         ระบบตรวจสอบสถานะคิวเชิญเพื่อนของคุณ<br>
         ติดตามสถานะได้ง่าย สะดวก และรวดเร็ว
     </div>
-    <div class="hero-note">🛡️ ระบบกดมือ 100% • อัปเดตข้อมูลจาก Google Sheets</div>
+    <div class="hero-note">🛡️ ระบบกดมือ 100% ปลอดภัยแน่นอน • s</div>
 </div>
 """, unsafe_allow_html=True)
 
