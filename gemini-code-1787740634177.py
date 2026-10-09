@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 import pandas as pd
 
@@ -670,4 +669,3 @@ except Exception as e:
     st.error(
         f"เกิดข้อผิดพลาดในการดึงข้อมูลจาก Google Sheets: {e}"
     )
-```
