@@ -482,36 +482,42 @@ def load_data():
 
         tick_count = 0
         has_waiting = False
+        has_progress = False
 
         for col in status_cols:
 
             val = str(row[col]).strip().upper()
 
-            # มี ⏳ = กำลังทำ
+            # ⏳ = กำลังดำเนินการ
             if "⏳" in val:
                 has_waiting = True
 
-            # รองรับเครื่องหมายสำเร็จ
+            # ✅ = มีความคืบหน้า; นับจำนวนช่องที่ทำเครื่องหมายแล้ว
             if "✅" in val or val == "TRUE":
                 tick_count += 1
+                has_progress = True
 
         return pd.Series({
             "tick_count": tick_count,
-            "has_waiting": has_waiting
+            "has_waiting": has_waiting,
+            "has_progress": has_progress
         })
 
     status_result = df.apply(analyze_status, axis=1)
 
     df["tick_count"] = status_result["tick_count"]
     df["has_waiting"] = status_result["has_waiting"]
+    df["has_progress"] = status_result["has_progress"]
 
     def get_status(row):
 
-        if row["has_waiting"]:
-            return "กำลังทำ"
-
-        elif row["tick_count"] >= 3:
+        # ครบ 3 ช่อง ✅ ให้เป็นสำเร็จ แม้มีเครื่องหมายอื่นในแถว
+        if row["tick_count"] >= 3:
             return "สำเร็จ"
+
+        # มี ✅ อย่างน้อย 1 ช่อง หรือมี ⏳ ให้เป็นกำลังดำเนินการ
+        elif row["has_progress"] or row["has_waiting"]:
+            return "กำลังทำ"
 
         else:
             return "รอคิว"
