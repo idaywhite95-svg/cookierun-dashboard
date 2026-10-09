@@ -487,12 +487,11 @@ def load_data():
 
             val = str(row[col]).strip().upper()
 
-            # ⏳ และ ✅ ใช้เป็นสถานะกำลังดำเนินการ
-            # ตรวจทั้งค่าที่อ่านได้ตรง ๆ และกรณี Google Sheets แปลง emoji/ค่าเป็นข้อความรูปแบบอื่น
-            if "⏳" in val or "✅" in val or val == "TRUE":
+            # มี ⏳ = กำลังทำ
+            if "⏳" in val:
                 has_waiting = True
 
-            # นับความคืบหน้าจากเครื่องหมายที่ทำสำเร็จเท่านั้น
+            # รองรับเครื่องหมายสำเร็จ
             if "✅" in val or val == "TRUE":
                 tick_count += 1
 
