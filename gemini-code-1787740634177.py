@@ -823,7 +823,7 @@ try:
         <div style="color:#b8a0ff;font-weight:600;">
             🎮 COOKIE RUN QUEUE TRACKER
         </div>
-        🔄 ระบบอัปเดตข้อมูลจาก Google Sheets ทุก 5 วินาที
+        🔄 ระบบอัปเดตข้อมูล ทุก 5 วินาที หรือหากข้อมูลไม่อัปเดต โปรดกดรีเฟรช ใหม่อีกครั้ง
         <br>
         <span style="color:#667394;">
             Neon Gaming Interface
