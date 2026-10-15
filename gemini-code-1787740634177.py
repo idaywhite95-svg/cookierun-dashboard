@@ -455,6 +455,10 @@ st.markdown("""
        style="color:#55d9ff; font-weight:700; text-decoration:none;">
         Sakkarin papai
     </a>
+     <br>
+    <div class="hero-subtitle">
+        ** เว็บไซต์นี้มีไว้แค่ดูสถานะคิวเท่านั้น
+    </div>
 </div>
 </div>
 """, unsafe_allow_html=True)
