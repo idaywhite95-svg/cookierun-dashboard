@@ -445,7 +445,8 @@ st.markdown("""
     <div class="hero-title">🎮 COOKIE RUN <span>Classic</span></div>
     <div class="hero-subtitle">
         ระบบตรวจสอบสถานะคิวเชิญเพื่อนของคุณ<br>
-        ติดตามสถานะได้ง่าย สะดวก และรวดเร็ว
+        ติดตามสถานะได้ง่าย สะดวก และรวดเร็ว<br>
+        ** เว็บไซต์นี้มีไว้แค่ดูสถานะคิวเท่านั้น
     </div>
     <div class="hero-note">🛡️ ระบบกดมือ 100% ปลอดภัยแน่นอน • </div>
     <br>
@@ -455,10 +456,6 @@ st.markdown("""
        style="color:#55d9ff; font-weight:700; text-decoration:none;">
         Sakkarin papai
     </a>
-     <br>
-    <div class="hero-subtitle">
-        ** เว็บไซต์นี้มีไว้แค่ดูสถานะคิวเท่านั้น
-    </div>
 </div>
 </div>
 """, unsafe_allow_html=True)
